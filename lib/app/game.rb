@@ -40,8 +40,11 @@ class Game
     @victory_check_ary.map do |h|
       h.map do |k,v| 
         if k == choice
-          puts k
-          h[k] = @show.board.a1.state@player1.symbol
+          puts @player1.symbol # x
+          puts choice # A1
+          puts k # A1  k == choice
+          puts v
+          h[h.keys[1]] = @player1.symbol
         end
         # else
         #   next
