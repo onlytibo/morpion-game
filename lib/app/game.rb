@@ -20,6 +20,7 @@ class Game
     @show = Show.new
 
     # affichage du board
+    system("clear")
     @show.display_board
 
     # lancement de la méthode qui boucle tant que le jeu n'est pas full ou victoire
@@ -43,10 +44,10 @@ class Game
         p1_choice = p1_choice.upcase
 
       end
-
+      
       @show.board.p1_choose_coord(p1_choice) # on remplace les coordonnées choisies par le joueur 1, par son symbol, dans le tableau des cellules (on lance les méthodes qui font ça)
       @show.board.p1_choose_coord_vic(p1_choice) # pareil mais dans le tableau des situations gagnantes
-      
+      system("clear")
       @show.display_board # on affiche le board dans son état mis à jour
 
       # on check si full ou si victoire suite au coup du joueur
@@ -77,7 +78,7 @@ class Game
 
         @show.board.p2_choose_coord(p2_choice) # on remplace les coordonnées choisies par le joueur 1, par son symbol, dans le tableau des cellules (on lance les méthodes qui font ça)
         @show.board.p2_choose_coord_vic(p2_choice) # pareil mais dans le tableau des situations gagnantes
-
+        system("clear")
         @show.display_board # on affiche le board dans son état mis à jour
 
         # on check si full ou si victoire suite au coup du joueur
