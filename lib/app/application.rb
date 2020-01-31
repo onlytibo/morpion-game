@@ -14,13 +14,11 @@ class Application
   end
 
   def self.start_a_game
-    puts "
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Bienvenue sur le jeu du MORPION
-  by Micamya & Tibo \u{1f60e}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    
+
     game_count # Compter une partie
+    if @@game_count <= 1
+      head
+    end
     puts "Pour commencer une partie, dites 'go'"
     print "> "
     choice_menu = gets.chomp
@@ -29,8 +27,26 @@ class Application
         print "> "
         choice_menu = gets.chomp
       end
+      system("clear")
     @game = Game.new # création d'une instance game de la class Game pour lancer une partie !
   end
 
+  def self.head
+    puts "="*56
+    puts "
+                                    d8b                 
+                                    Y8P                 
+                                                        
+88888b.d88b.  .d88b. 888d88888888b. 888 .d88b. 88888b.  
+888 '888 '88bd88''88b888P'  888 '88b888d88''88b888 '88b 
+888  888  888888  888888    888  888888888  888888  888 
+888  888  888Y88..88P888    888 d88P888Y88..88P888  888 
+888  888  888 'Y88P' 888    88888P' 888 'Y88P' 888  888 
+                            888                         
+                            888   by Micamya & Tibo                      
+                            888                        "
+    puts "="*56
+    puts "\n\n"
+  end
 
 end

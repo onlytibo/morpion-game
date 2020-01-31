@@ -3,12 +3,16 @@ class Game
 
   def initialize
     # on crée le joueur 1
+    system("clear")
+    header
     puts "Joueur 1,tu seras le panda, choisis un pseudo :"
     print "\u{1f43c} > "
     name_player1 = gets.chomp
     symbol_player1 = "x"    
     @player1 = Player.new(name_player1, symbol_player1)
 
+    system("clear")
+    header
     # on crée le joueur 2
     puts "Joueur 2, tu seras le lion, choisis un pseudo :"
     print "\u{1f42f} > "
@@ -21,10 +25,30 @@ class Game
 
     # affichage du board
     system("clear")
+    header
     @show.display_board
 
     # lancement de la méthode qui boucle tant que le jeu n'est pas full ou victoire
     turn
+  end
+  def header
+    puts "="*56
+    puts "
+                                    d8b                 
+                                    Y8P                 
+                                                        
+88888b.d88b.  .d88b. 888d88888888b. 888 .d88b. 88888b.  
+888 '888 '88bd88''88b888P'  888 '88b888d88''88b888 '88b 
+888  888  888888  888888    888  888888888  888888  888 
+888  888  888Y88..88P888    888 d88P888Y88..88P888  888 
+888  888  888 'Y88P' 888    88888P' 888 'Y88P' 888  888 
+                            888                         
+                            888   by Micamya & Tibo                      
+                            888                        "
+    puts "="*56
+    puts "Partie n°#{Application.class_variable_get(:@@game_count)}"
+    puts "\n\n"
+
   end
 
   def turn
@@ -48,6 +72,7 @@ class Game
       @show.board.p1_choose_coord(p1_choice) # on remplace les coordonnées choisies par le joueur 1, par son symbol, dans le tableau des cellules (on lance les méthodes qui font ça)
       @show.board.p1_choose_coord_vic(p1_choice) # pareil mais dans le tableau des situations gagnantes
       system("clear")
+      header
       @show.display_board # on affiche le board dans son état mis à jour
 
       # on check si full ou si victoire suite au coup du joueur
@@ -79,6 +104,7 @@ class Game
         @show.board.p2_choose_coord(p2_choice) # on remplace les coordonnées choisies par le joueur 1, par son symbol, dans le tableau des cellules (on lance les méthodes qui font ça)
         @show.board.p2_choose_coord_vic(p2_choice) # pareil mais dans le tableau des situations gagnantes
         system("clear")
+        header
         @show.display_board # on affiche le board dans son état mis à jour
 
         # on check si full ou si victoire suite au coup du joueur
