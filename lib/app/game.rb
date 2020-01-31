@@ -1,141 +1,98 @@
 class Game
   attr_accessor :player1, :player2, :show
-    @@state_of_game = ""
 
   def initialize
-    puts "pseudo du player 1"
-    symbol_player1 = "x"
-    print "> "
-    name_player1 = gets.chomp    
+    # on crée le joueur 1
+    puts "Joueur 1,tu seras le panda, choisis un pseudo :"
+    print "\u{1f43c} > "
+    name_player1 = gets.chomp
+    symbol_player1 = "x"    
     @player1 = Player.new(name_player1, symbol_player1)
-    puts "pseudo du player 2"
-    
-    symbol_player2 = "o"
-    print "> "
+
+    # on crée le joueur 2
+    puts "Joueur 2, tu seras le lion, choisis un pseudo :"
+    print "\u{1f42f} > "
     name_player2 = gets.chomp
+    symbol_player2 = "o"
     @player2 = Player.new(name_player2, symbol_player2)
+
+    # création d'une instance de Show pour créer les autres éléments de la partie (board et cellules)
     @show = Show.new
-    @victory_check_ary = [
-      {@show.board.a1.coord => @show.board.a1.state,@show.board.a2.coord => @show.board.a2.state,@show.board.a3.coord => @show.board.a3.state},
-      {@show.board.b1.coord => @show.board.b1.state,@show.board.b2.coord => @show.board.b2.state,@show.board.b3.coord => @show.board.b3.state},
-      {@show.board.c1.coord => @show.board.c1.state,@show.board.c2.coord => @show.board.c2.state,@show.board.c3.coord => @show.board.c3.state},
-      {@show.board.a1.coord => @show.board.a1.state,@show.board.b1.coord => @show.board.b1.state,@show.board.c1.coord => @show.board.b1.state},
-      {@show.board.a2.coord => @show.board.a2.state,@show.board.b2.coord => @show.board.b2.state,@show.board.c2.coord => @show.board.b2.state},
-      {@show.board.a3.coord => @show.board.a3.state,@show.board.b3.coord => @show.board.b3.state,@show.board.c3.coord => @show.board.c3.state},
-      {@show.board.a1.coord => @show.board.a1.state,@show.board.b2.coord => @show.board.b2.state,@show.board.c3.coord => @show.board.c3.state},
-      {@show.board.a3.coord => @show.board.a3.state,@show.board.b2.coord => @show.board.b2.state,@show.board.c1.coord => @show.board.c1.state}
-    ]
-    @show.game_count
+
+    # affichage du board
     @show.display_board
+
+    # lancement de la méthode qui boucle tant que le jeu n'est pas full ou victoire
     turn
   end
 
-  def select_coord
-
-  end
-
-
-  def victory_template(choice)
-  # board.rb
-    @victory_check_ary.map do |h|
-      h.map do |k,v| 
-        if k == choice
-          puts @player1.symbol # x
-          puts choice # A1
-          puts k # A1  k == choice
-          puts v
-          h[h.keys[1]] = @player1.symbol
-        end
-        # else
-        #   next
-        
-      end
-      return @victory_check_ary
-    end
-  end
-  # board.rb
-  def is_full?
-    board_full = @victory_check_ary.map {|h| h.has_value?(" ")}
-    if !board_full.include?(true)
-      @@state_of_game = "full"
-      puts @@state_of_game 
-      # continuer de jouer 
-    else 
-      @@state_of_game = "continue"
-      puts "continue"
-    end
-  end
-
-  def victory?
-    @victory_check_ary.each do |h|
-
-      line_to_check_ary = h.map do |k,v| 
-        "#{v}" # affiche toutes les valeurs du hash qu'il parcours genre "x" puis "x" puis "x"
-      end
-
-      if line_to_check_ary.join('') == "xxx"
-        @@state_of_game = "player 1 win"
-        puts "player 1 win"
-        return @@state_of_game
-        # end_of_game dans game.rb
-        # Retour au menu
-        # +1 au compteur de partie pour joueur 1
-      elsif line_to_check_ary.join('') == "ooo"
-        @@state_of_game = "player 1 win"
-        puts "player 2 win"
-        return @@state_of_game
-        # Message de fin de Game
-        # Retour au menu
-        # +1 au compteur de partie pour joueur 2
-      else
-        next
-      end
-
-    end
-
-    @@state_of_game = is_full?
-    return @@state_of_game
-  end
-
-
   def turn
-    while @@state_of_game != "full" &&  @@state_of_game != "player 1 win" &&  @@state_of_game != "player 2 win"
-      print "#{@player1.name} choisis une coordonnée"
-      p1_choice = gets.chomp
-      p1_choose_coord(p1_choice)
-          @show.display_board
+    while @show.board.victory? != "full" && @show.board.victory? != "player 1 win" && @show.board.victory? != "player 2 win" # tant que @@state_of_game ne prend pas une valeur full ou victoire
       
-      print "#{@player2.name} choisis une coordonnée"
-      p2_choice = gets.chomp
-      p2_choose_coord(p2_choice)
-          @show.display_board
+      puts "_________________________________________"
+      print "\u{1f43c} #{@player1.name}, à ton tour choisis une coordonnée : "
+      p1_choice = gets.chomp
+      p1_choice = p1_choice.upcase
+
+      # tant que la saisie n'est pas correcte, on gère l'erreur
+      while p1_choice != "A1" && p1_choice != "A2" && p1_choice != "A3" && p1_choice != "B1" && p1_choice != "B2" && p1_choice != "B3" && p1_choice != "C1" && p1_choice != "C2" && p1_choice != "C3"
+        
+        puts "Merci de saisir une coordonnée du genre A1, A2... tu connais quoi !"
+        print "> "
+        p1_choice = gets.chomp
+        p1_choice = p1_choice.upcase
+
+      end
+
+      @show.board.p1_choose_coord(p1_choice) # on remplace les coordonnées choisies par le joueur 1, par son symbol, dans le tableau des cellules (on lance les méthodes qui font ça)
+      @show.board.p1_choose_coord_vic(p1_choice) # pareil mais dans le tableau des situations gagnantes
+      
+      @show.display_board # on affiche le board dans son état mis à jour
+
+      # on check si full ou si victoire suite au coup du joueur
+      if @show.board.victory? == "full" || @show.board.victory? == "player 1 win" || @show.board.victory? == "player 2 win" 
+        if @show.board.victory? == "full" # message si full
+          puts "Ex-aéquo :)\nTry again !\n~~~~~~~~~~~~~"
+          new_game = Application.new
+        else # message si joueur gagne
+          puts "BRAVO \u{1f43c} #{@player1.name} \nYOU ROCK\n~~~~~~~~~~~~~"
+          new_game = Application.new
+        end
+
+      else # si le jeu continue... on prend le choix de coordonnée du joueur 2
+        puts "_________________________________________"
+        print "\u{1f42f} #{@player2.name}, à ton tour choisis une coordonnée : "
+        p2_choice = gets.chomp
+        p2_choice = p2_choice.upcase
+        
+        # on gère la saisie correcte
+        while p2_choice != "A1" && p2_choice != "A2" && p2_choice != "A3" && p2_choice != "B1" && p2_choice != "B2" && p2_choice != "B3" && p2_choice != "C1" && p2_choice != "C2" && p2_choice != "C3"
+          
+          puts "Merci de saisir une coordonnée du genre A1, A2... tu connais quoi !"
+          print "> "
+          p2_choice = gets.chomp
+          p2_choice = p2_choice.upcase
+
+        end
+
+        @show.board.p2_choose_coord(p2_choice) # on remplace les coordonnées choisies par le joueur 1, par son symbol, dans le tableau des cellules (on lance les méthodes qui font ça)
+        @show.board.p2_choose_coord_vic(p2_choice) # pareil mais dans le tableau des situations gagnantes
+
+        @show.display_board # on affiche le board dans son état mis à jour
+
+        # on check si full ou si victoire suite au coup du joueur
+        if @show.board.victory? == "full" || @show.board.victory? == "player 1 win" || @show.board.victory? == "player 2 win" 
+          if @show.board.victory? == "full" # message si full
+            puts "Ex-aéquo :)\nTry again !\n~~~~~~~~~~~~~"
+            new_game = Application.new
+          else # message si joueur gagne !
+            puts "BRAVO \u{1f42f} #{@player2.name} \nYOU ROCK\n~~~~~~~~~~~~~"
+            new_game = Application.new
+          end
+        else
+          next
+        end
+      end
     end
   end
-
-  def p1_choose_coord(coord)
-    @victory_check_ary = victory_template(coord)
-  end
-
-  def p2_choose_coord(coord)
-    @victory_check_ary = victory_template(coord)
-  end
-
-  def end_of_game
-    # soit full_grid
-    
-    # soit winner_is
-    
-    # retour au
-  end
-
-  def full_grid
-
-  end
-
-  def winner_is
-
-  end
-
-
-
 end

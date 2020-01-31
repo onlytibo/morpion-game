@@ -1,14 +1,8 @@
 class BoardCase
   attr_accessor :coord, :state
   
-  def initialize(coord, state = " ")
-    @coord = coord
-    @state = state
+  def initialize(coord, state = " ") # on initialise les cellules du tableau avec un " "
+    @coord = coord # coord correspond à A1, A2...
+    @state = state # correspond à la valeur prise par la cellule "x", "o", " "
   end
-
-  def change_state
-    @cell = ""  
-    hash["A1"] = camille.symbol
-  end
-
 end
